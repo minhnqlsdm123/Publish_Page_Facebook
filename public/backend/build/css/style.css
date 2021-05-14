@@ -1,0 +1,16 @@
+.login {
+    background-image: url(../../images/background-login.jpg);
+}
+
+.select2-container {
+    width: 100%!important;
+}
+
+img {
+    max-width: 100%!important;
+    height: auto;
+}
+
+.w-162 {
+    width: 162px;
+}

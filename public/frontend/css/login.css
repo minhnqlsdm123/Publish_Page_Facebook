@@ -1,0 +1,248 @@
+* {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+}
+
+body {
+    color: #7a8994;
+    font-family: sans-serif;
+    font-size: 15px;
+}
+
+.wp-form-login {
+    background: #fff;
+    width: 40%;
+    height: 100%;
+    padding: 35px 40px;
+    margin: 30px auto;
+}
+
+.form-login .title {
+    margin-bottom: 15px;
+    font-size: 18px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.group-input {
+    border: 1px solid rgba(0, 0, 0, .07);
+    padding: 7px 12px 4px;
+    border-radius: 2px;
+    margin-bottom: 10px;
+    outline: none;
+    transition: all 1s ease;
+}
+
+.group-input:hover {
+    border: 1px solid #00BCD4;
+    transition: all 1s ease;
+}
+
+.group-input label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 5px 0;
+    text-transform: uppercase;
+}
+
+.group-input>input[type=email],
+.group-input>input[type=password] {
+    border: none;
+    width: 100%;
+    height: 25px;
+}
+
+.group-input input[type=email]:focus,
+.group-input input[type=password]:focus {
+    border: none;
+}
+
+.group-button {
+    margin: 15px 0;
+}
+
+.group-button .sm-login {
+    float: left;
+    color: #fff;
+    background-color: #007be8;
+    border-color: #007be8;
+    padding: 10px 30px;
+    border-radius: 5px;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.group-button .forget-pass {
+    float: right;
+    color: #007be8;
+    text-decoration: none;
+    font-weight: normal;
+    line-height: 35px;
+}
+
+.group-button .forget-pass:hover {
+    color: #03A9F4;
+}
+
+.d-block {
+    display: block;
+}
+
+.w-100 {
+    width: 100%;
+}
+
+.btn-social {
+    text-align: left;
+    color: #fff;
+    position: relative;
+    padding: 15px 40px;
+    margin-bottom: 15px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.log-fb {
+    background-color: #3b5998;
+}
+
+.log-gg {
+    background-color: #a32b1c;
+}
+
+.btn-social>i {
+    position: absolute;
+    left: 0;
+    font-size: 30px;
+    top: 0px;
+    bottom: 0;
+    line-height: 46px;
+    padding: 0 10px;
+    border-right: 1px solid rgba(0, 0, 0, .2);
+    width: 24px;
+}
+
+.btn-social>span {
+    padding: 5px 15px;
+}
+
+.link-regis {
+    color: #0064bc;
+    display: inline-block;
+    text-decoration: none;
+    margin-right: 7px;
+}
+
+.wp_quote {
+    position: absolute;
+    bottom: 5%;
+    left: 2%;
+    color: #373e43;
+}
+
+.wp_quote>.text {
+    font-size: 40px;
+    margin: 10px 0;
+    font-weight: 400;
+}
+
+.wp_quote>.name {
+    font-size: 13px;
+}
+
+.group-input-check {
+    margin-bottom: 30px;
+    position: relative;
+}
+
+.group-input-check>label {
+    cursor: pointer;
+}
+
+.group-input-check label>span {
+    content: " ";
+    width: 20px;
+    height: 19px;
+    border: 2px solid rgba(0, 0, 0, .07);
+    position: absolute;
+    top: 0px;
+    cursor: pointer;
+    left: 84px;
+}
+
+.group-input-check span span {
+    ontent: " ";
+    width: 3px;
+    height: 9px;
+    border: 1px solid red;
+    position: absolute;
+    top: 2px;
+    cursor: pointer;
+    left: 84px;
+    border-top: 0;
+    border-left: 0;
+    transform: rotate(45deg);
+    left: 7px;
+    display: none;
+}
+
+.group-input-check input[type=checkbox] {
+    display: none;
+}
+
+.group-input-check input:checked+span>span {
+    display: block;
+}
+
+#email {
+    border: none;
+}
+
+.link-tiki {
+    display: block;
+    font-size: 17px;
+}
+
+.banner-fixed {
+    display: none;
+}
+
+
+/*1024px*/
+
+@media only screen and (max-width: 1024px) {
+    .wp-form-login {
+        width: 70%;
+    }
+}
+
+
+/*768px*/
+
+@media screen and (max-width: 768px) {
+    .wp-form-login {
+        margin: 0 auto;
+        padding: 80px 30px;
+    }
+}
+
+
+/*650*/
+
+@media screen and (max-width: 480px) {
+    body {
+        font-size: 13px;
+    }
+    .form-login .title {
+        font-size: 14px;
+    }
+    .wp-form-login {
+        padding: 50px 20px;
+    }
+    .wp-form-login {
+        width: 100%;
+    }
+}

@@ -1,0 +1,15 @@
+@font-face {
+    font-family: "Calibri";
+    src: url( /samples/toolbarconfigurator/font/Calibri.ttf ); /* IE */
+    src: local("realfontname"), url("/samples/toolbarconfigurator/font/Calibri.ttf") format("truetype"); /*non-IE*/
+}
+@font-face {
+    font-family: "Helvetica";
+    src: url( /samples/toolbarconfigurator/font/Helvetica.ttf ); /* IE */
+    src: local("realfontname"), url("/samples/toolbarconfigurator/font/Helvetica.ttf") format("truetype"); /*non-IE*/
+}
+@font-face {
+    font-family: "微软正黑体";
+    src: url( /samples/toolbarconfigurator/font/微软正黑体.ttf ); /* IE */
+    src: local("realfontname"), url("/samples/toolbarconfigurator/font/微软正黑体.ttf") format("truetype"); /*non-IE*/
+}

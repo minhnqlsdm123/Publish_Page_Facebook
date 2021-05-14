@@ -1,0 +1,144 @@
+*{ 
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+ }
+ .clearfix:after {
+    content: ".";
+    display: block;
+    clear: both;
+    visibility: hidden;
+    line-height: 0;
+    height: 0;
+}
+  
+.clearfix {
+    clear: both;
+    display: block;
+}
+body {
+	color: rgb(68, 68, 68);
+	font-family: Roboto, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    background: #f7f6f1;
+}
+.wp-inner {
+	max-width: 1270px;
+	display: block;
+	margin: 0 auto;
+}
+
+.wp-header {
+	background: rgb(24, 158, 255);
+    padding: 20px 0;
+    color: #fff;
+    position: relative;
+    margin-bottom: 10px;
+}
+
+.wp-header .title-menu {
+	position: relative;
+    left: 10px;
+    font-size: 18px;
+}
+.wp-header .title-menu:before {
+	font-family: FontAwesome;
+	content: '\f0c9';
+	margin-right: 10px;
+}
+.wp-main-menu {
+	border: 1px solid #c8b9b9;
+	display: flex;
+}
+.main-menu {
+	width: 25%;
+	background: #fff;
+	border-right: 1px solid #c8b9b9;
+	position: relative;
+	float: left;
+}
+.main-menu li {
+	list-style-type: none;
+}
+.main-menu > li > a {
+	display: block;
+    color: rgb(68, 68, 68);
+    text-decoration: none;
+    padding: 10px 13px;
+	
+}
+.main-menu > li > a {
+	position: relative;
+}
+
+.main-menu > li > a:after {
+	content: " ";
+    border: 19px solid rgb(24, 158, 255);
+    position: absolute;
+    top: 0;
+    right: -38px;
+    border-top-color: transparent;
+    border-right-color: transparent;
+    border-bottom-color: transparent;
+    display: none;
+    z-index: 100;
+}
+.main-menu > li:hover > a:after {
+	display: block;
+}
+.main-menu > li:hover {
+	background-color: rgb(24, 158, 255);
+}
+.main-menu > li:hover > a {
+	color: #fff;
+}
+.main-menu > li:hover > a > i {
+	color: #fff;
+}
+.main-menu > li > a > i {
+	font-size: 18px;
+    margin-right: 5px;
+    width: 18px;
+    text-align: center;
+    color: #918d8d;
+}
+
+.main-menu .sub-menu {
+	position: absolute;
+    width: 890px;
+    background: #fff;
+    height: 530px;
+    left: 101%;
+    top: 0;
+    padding: 30px;
+    display: none;
+    transition: all ease 0.05s;
+}
+.main-menu > li:hover > .sub-menu {
+	display: block;
+	transition: all ease 0.05s;
+}
+.main-menu .sub-menu > .item {
+	width: 25%;
+	float: left;
+}
+.main-menu .sub-menu > .item a {
+	text-decoration: none;
+	display: block;
+	padding: 6px 10px;
+	color: rgb(68, 68, 68);
+}
+.main-menu .sub-menu > .item a.title {
+	font-weight: bold;
+}
+
+/*content-feature*/
+.content-feature {
+	float: right;
+    width: 75%;
+    margin-left: 2px;
+}
+.content-feature img {
+	width: 100%;
+}
