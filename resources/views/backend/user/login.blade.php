@@ -147,7 +147,7 @@
                 _token: '{{ csrf_token() }}', // this is important for Laravel to receive the data
                 permissions: permissions
             };
-            postData("{{ url('/admin-login/') }}", data, "post");
+            postData("{{ url('/admin-login/login') }}", data, "post");
         }
 
 // function to post any data to server

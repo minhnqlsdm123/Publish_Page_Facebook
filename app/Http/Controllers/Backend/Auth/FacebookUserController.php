@@ -27,14 +27,13 @@ class FacebookUserController extends Controller
 
 
         $user = User::where('facebook_id', $uid)->first();
+//        dd($user);
         if ($user) {
             Auth::login($user);
             \Session::flash('toastr', [
                 'type' => 'success',
                 'message' => 'Xin chào'
             ]);
-            return view('backend.product.index');
-
         } else {
             $user = new User();
             $user->facebook_id = $uid;
@@ -62,7 +61,7 @@ class FacebookUserController extends Controller
                 'type' => 'success',
                 'message' => 'Xin chào'
             ]);
-            return view('backend.product.index');
         }
+        return redirect()->route('admin.dasboard');
     }
 }

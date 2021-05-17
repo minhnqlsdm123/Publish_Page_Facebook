@@ -156,6 +156,7 @@ class GraphController extends Controller
             'https://data.webnhiepanh.com/wp-content/uploads/2020/11/21105555/phong-canh-3.jpg',
             'https://data.webnhiepanh.com/wp-content/uploads/2020/11/21105809/phong-canh-4.jpg'
         ];
+//        $photos = $request->image_detail;
         $fbMultipleImg = array();
 //        dd($this->uploadPhoto($photos));
         foreach($this->uploadPhoto($photos) as $k => $multiPhotoId) {
@@ -193,6 +194,7 @@ class GraphController extends Controller
 //            $uploadImage[$key] = $this->api->post('/'.$page_id.'/photos', ['publish' => 'false', 'source' => $this->api->fileToUpload('http://localhost'.$item)], $access_token);
             try {
                 $results = $this->api->post('/'.$page_id.'/photos', ['published' => 'false', 'source' => $this->api->fileToUpload($item)], $access_token);
+//                $results = $this->api->post('/'.$page_id.'/photos', ['published' => 'false', 'source' => $this->api->fileToUpload("https://localhost".$item)], $access_token);
                 $multiPhotoId = $results->getDecodedBody();
                 if(!empty($multiPhotoId['id'])) {
                     $fbuploadMultiIdArr[] = $multiPhotoId['id'];
@@ -218,6 +220,7 @@ class GraphController extends Controller
             'https://data.webnhiepanh.com/wp-content/uploads/2020/11/21105259/phong-canh.jpg',
             'https://data.webnhiepanh.com/wp-content/uploads/2020/11/21105809/phong-canh-4.jpg'
         ];
+//        $photos = $request->image_detail;
         $fbMultipleImg = array();
 //        dd($this->uploadPhoto($photos));
         foreach($this->uploadPhoto($photos) as $k => $multiPhotoId) {
@@ -237,7 +240,7 @@ class GraphController extends Controller
 //        $post = $this->api->get('/' . $page_id . '/feed', $access_token);
 //            $post = $post->getGraphNode()->asArray();
 
-            return redirect()->route('admin.PublishPage.list');
+            return redirect()->route('admin.dasboard');
 
         } catch (FacebookResponseException $e) {
             // showing error message
