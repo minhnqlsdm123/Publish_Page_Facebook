@@ -34,66 +34,63 @@
                     </div>
                     <div class="x_content">
                         <!-- start project list -->
-                        <table class="table table-striped projects">
+                        <table class="table table-striped projects" id="tblPublishPage">
                             <thead>
                                 <tr>
-                                    <th style="width: 1%">#</th>
+                                    <th style="width: 20%">#</th>
                                     <th style="width: 20%">ID</th>
                                     <th style="width: 20%">Message</th>
                                     <th style="width: 20%">Ảnh</th>
-                                    <th style="width: 20%">
-                                    </th>
+                                    <th style="width: 20%">action</th>
                                 </tr>
                             </thead>
                             <tbody>
-{{--                            {{ $posts }}--}}
                                 @if (!empty($posts))
                                 @foreach ($posts as $k => $post)
-{{--                                    {{dd($post)}}--}}
                                 <tr>
                                     <td>{{ $k+1 }}</td>
                                     <td>
                                         <a>{{ $post['id'] }}</a>
                                     </td>
                                     @if (!empty($post['message']))
-
-                                    <td>
-                                        <a>{{ $post['message'] }}</a>
-                                    </td>
+                                    <td><a>{{ $post['message'] }}</a></td>
                                     @else
                                         <td></td>
-
                                     @endif
-
-                                        <td>
-                                    </td>
+                                    <td><img src="{{ asset('backend/images/user.png') }}" class="avatar" alt="Avatar"></td>
                                     <td>
-                                        <img src="{{ asset('backend/images/user.png') }}" class="avatar" alt="Avatar">
-                                    </td>
-                                    <td>
-                                        <a href="" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View
-                                        </a>
-                                        <a href="{{ route('admin.PublishPage.update', $post['id']) }}"
-                                            class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Sửa </a>
-                                        <a href="{{ route('admin.category.action', ['delete', $post['id']]) }}"
-                                            class="btn btn-danger btn-xs"
-                                            onclick="return confirm('Bạn chắc chắn muốn xóa')"><i
-                                                class="fa fa-trash-o"></i> Xóa
-                                        </a>
+                                        <a href="" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View</a>
+                                        <a href="{{ route('admin.PublishPage.update', $post['id']) }}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Sửa </a>
+                                        <a href="{{ route('admin.PublishPage.delete', [$post['id']]) }}" class="btn btn-danger btn-xs" onclick="return confirm('Bạn chắc chắn muốn xóa')"><i  class="fa fa-trash-o"></i> Xóa</a>
                                     </td>
                                 </tr>
-
                                 @endforeach
                                 @endif
-
                             </tbody>
                         </table>
                         <!-- end project list -->
-
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+@endsection
+@section('script')
+{{--    <script>--}}
+    {{--    $(function() {--}}
+    {{--        $('#tblPublishPage').DataTable({--}}
+    {{--            processing: true,--}}
+    {{--            serverSide: true,--}}
+    {{--            ajax: '{{route('admin.PublishPage.dataTable')}}',--}}
+    {{--            columns: [--}}
+    {{--                {data:'id', name: 'id'},--}}
+    {{--                {data:'message', name: 'message'},--}}
+    {{--                // {data:'created_at', name: 'created_at'},--}}
+    {{--                // {data:'action', name: 'action'},--}}
+    {{--            ]--}}
+
+    {{--        });--}}
+    {{--    });--}}
+    {{--</script>--}}
 @endsection

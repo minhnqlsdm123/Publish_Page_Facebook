@@ -34,6 +34,7 @@
     <link href="{{ asset('backend/vendors/dropzone/dist/min/dropzone.min.css') }}" rel="stylesheet">
     <link href="{{ asset('backend/build/css/toastr.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('backend/build/css/style.css') }}" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css" />
     @yield('css')
     <!-- Custom Theme Style -->
     <link href="{{ asset('backend/build/css/custom.min.css') }}" rel="stylesheet">
@@ -224,6 +225,7 @@
 
     <!-- jQuery -->
     <script src="{{ asset('backend/vendors/jquery/dist/jquery.min.js') }}"></script>
+    <script src = "http://cdn.datatables.net/1.10.18/js/jquery.dataTables.min.js"></script>
     <!-- Bootstrap -->
     <script src="{{ asset('backend/vendors/bootstrap/dist/js/bootstrap.min.js') }}"></script>
     <!-- FastClick -->
@@ -313,7 +315,7 @@
                 // dictFileTooBig: 'Image is larger than 200Kb',
                 dictRemoveFileConfirmation: 'Are you sure?',
                 timeout: 10000,
-    
+
                 init: function () {
                     this.on("removedfile", function (file) {
                         $('#'+file.serverFileUuid).remove();
@@ -334,7 +336,7 @@
                 },
                 success: function (file, responseData) {
                     $('#photo-dropzone').append('<input type="hidden" id="'+responseData.uuid+'" name="uuid_photos[]"  value="'+responseData.uuid+'">');
-    
+
                     file.serverFileUuid = responseData.uuid;
                     toastr.success('File '+ file.name +' uploaded successful!');
                 }

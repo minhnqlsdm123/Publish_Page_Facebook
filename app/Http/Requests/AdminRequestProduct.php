@@ -27,7 +27,7 @@ class AdminRequestProduct extends FormRequest
             'name' => 'required|min:3|max:120|unique:products,pro_name,' . $this->id,
             'price' => 'required',
             'description' => 'required|min:3|max:255',
-            'content' => 'required',
+//            'content' => 'required',
             // 'keyword' => 'required',
         ];
     }
@@ -43,7 +43,7 @@ class AdminRequestProduct extends FormRequest
             'description.required' => 'Dữ liệu không được trống',
             'description.min' => 'Dữ liệu có độ dài từ 3 đến 255 kí tự',
             'description.max' => 'Dữ liệu có độ dài từ 3 đến 255 kí tự',
-            'content.required' => 'Dữ liệu không được trống',
+//            'content.required' => 'Dữ liệu không được trống',
             // 'keyword.required' => 'Dữ liệu không được trống',
         ];
     }

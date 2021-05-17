@@ -1,8 +1,4 @@
 @extends('backend.master')
-@section('css')
-    <link href="{{ asset('backend/build/css/select2.min.css') }}" rel="stylesheet" />
-@endsection
-@extends('backend.master')
 @section('content')
 <div class="right_col" role="main" style="min-height: 3538px;">
     <div class="">
@@ -44,6 +40,4 @@
     </div>
 </div>
 @endsection
-@push('tools')
-    @includeIf('tools.ckeditor')
-@endpush
+

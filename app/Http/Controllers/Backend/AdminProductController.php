@@ -36,7 +36,7 @@ class AdminProductController extends BaseController
     }
     public function postAdd(AdminRequestProduct $request)
     {
-        // dd($request->all());
+//         dd($request->all());
         // die();
         $product = new Product();
         $product->pro_name = $request->name;
@@ -47,17 +47,18 @@ class AdminProductController extends BaseController
         $product->pro_status = $request->status ?? 0;
         $product->pro_hot = $request->hot ?? 0;
         $product->pro_description = $request->description;
-        $product->pro_content = $request->content;
+//        $product->pro_content = $request->content;
         $product->created_at = Carbon::now();
         $product->pro_avatar = $request->avatar;
         $product->pro_image_detail = $request->image_detail;
+//        dd($product);
         try {
             DB::beginTransaction();
             $product->save();
             $productId = $product->id;
             $categoryId = $request->cat_id;
             //----------------
-            $this->syncInsertOrUpdateCate($categoryId, $productId);
+//            $this->syncInsertOrUpdateCate($categoryId, $productId);
             DB::commit();
             \Session::flash('toastr', [
                 'type'    => 'success',
@@ -92,13 +93,13 @@ class AdminProductController extends BaseController
         $product = Product::findOrFail($id);
         $product->pro_name = $request->name;
         $product->pro_slug = \Str::slug($request->name);
-        $product->pro_cat_id = $request->cat_id;
+//        $product->pro_cat_id = $request->cat_id;
         $product->pro_price = $request->price;
         $product->pro_sale = $request->sale ?? 0;
         $product->pro_status = $request->status ?? 0;
         $product->pro_hot = $request->hot ?? 0;
         $product->pro_description = $request->description;
-        $product->pro_content = $request->content;
+//        $product->pro_content = $request->content;
         $product->pro_avatar = $request->avatar;
         $product->pro_image_detail = $request->image_detail;
         $product->created_at = Carbon::now();
@@ -107,9 +108,9 @@ class AdminProductController extends BaseController
             DB::beginTransaction();
             $product->save();
             $productId = $product->id;
-            $categoryId = $request->cat_id;
+//            $categoryId = $request->cat_id;
             //----------------
-            $this->syncInsertOrUpdateCate($categoryId, $productId);
+//            $this->syncInsertOrUpdateCate($categoryId, $productId);
             DB::commit();
             \Session::flash('toastr', [
                 'type'    => 'success',

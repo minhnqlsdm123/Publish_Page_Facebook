@@ -52,10 +52,9 @@ Route::prefix('admin')->namespace('Backend')->middleware('AdminCheckLogout')->gr
     });
     Route::prefix('page')->group(function () {
         Route::get('/', 'GraphController@getPostPage')->name('admin.PublishPage.list');
+//        Route::get('/get-data','GraphController@anyData')->name('admin.PublishPage.dataTable');
         Route::get('add', 'GraphController@getAdd')->name('admin.PublishPage.add');
         Route::post('add', 'GraphController@publishPage');
-
-//        Route::post('add', 'AdminCategoryController@postAdd');
         Route::get('update/{id}', 'GraphController@getDetailPostPage')->name('admin.PublishPage.update');
         Route::post('update/{id}', 'GraphController@updatePostPage');
         Route::get('delete/{id}', 'GraphController@getDelete')->name('admin.PublishPage.delete');

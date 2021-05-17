@@ -17,6 +17,7 @@
                     <div class="row" style="margin-bottom: 15px;">
                         <div class="col-md-2">
                             <img id="image-preview-image_detail" class="img-fluid" src='/backend/build/images/default.jpg'>
+{{--                            <img id="image-preview-image_detail" class="img-fluid" src='{{ old('message', $post['src_photos'][0] ?? '') }}'>--}}
                         </div>
                         <div class="col-md-8">
                             <input type="text" name="image_detail[]" value="/backend/build/images/default.jpg" id="image_detail"
