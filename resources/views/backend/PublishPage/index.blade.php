@@ -40,7 +40,7 @@
                                     <th style="width: 20%">#</th>
                                     <th style="width: 20%">ID</th>
                                     <th style="width: 20%">Message</th>
-                                    <th style="width: 20%">Ảnh</th>
+                                    <th style="width: 20%">Trạng thái</th>
                                     <th style="width: 20%">action</th>
                                 </tr>
                             </thead>
@@ -57,7 +57,13 @@
                                     @else
                                         <td></td>
                                     @endif
-                                    <td><img src="{{ asset('backend/images/user.png') }}" class="avatar" alt="Avatar"></td>
+                                    <td>
+                                        @if($post['is_published'] == true)
+                                           <a href="a" class="text-success">Published</a>
+                                        @else
+                                            <a href="a" class="text-danger">Unpublished</a>
+                                        @endif
+                                    </td>
                                     <td>
                                         <a href="" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View</a>
                                         <a href="{{ route('admin.PublishPage.update', $post['id']) }}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Sửa </a>

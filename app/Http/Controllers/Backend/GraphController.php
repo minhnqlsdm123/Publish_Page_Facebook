@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Str;
 use Yajra\DataTables\Contracts\DataTable;
+//use Carbon\Carbon;
 
 class GraphController extends Controller
 {
@@ -97,7 +98,8 @@ class GraphController extends Controller
     public function getPostPage() {
         $page_id = '1943970019218960';
         $access_token = $this->getPageAccessToken();
-        $posts = $this->api->get('/' . $page_id . '/feed', $access_token);
+        $fields = "id,message,attachments,is_published";
+        $posts = $this->api->get('/' . $page_id . '/feed?fields='.$fields, $access_token);
         $posts = $posts->getGraphEdge()->asArray();
         return view('backend.PublishPage.index', ['posts' => $posts]);
 
@@ -126,7 +128,7 @@ class GraphController extends Controller
     public function getDetailPostPage($id) {
         $page_id = '1943970019218960';
         $access_token = $this->getPageAccessToken();
-        $fields = "id,message,attachments";
+        $fields = "id,message,attachments,is_published";
         $post = $this->api->get('/' . $id .'?fields='.$fields, $access_token);
 //        dd($post);
         $post = $post->getGraphNode()->asArray();
@@ -147,7 +149,9 @@ class GraphController extends Controller
 
 
         $data = [];
+
         $data['message'] = $request->message;
+
 //        $data['photos'] = $request->image_detail;
         $page_id = '1943970019218960';
         $access_token = $this->getPageAccessToken();
@@ -158,11 +162,11 @@ class GraphController extends Controller
         ];
 //        $photos = $request->image_detail;
         $fbMultipleImg = array();
-//        dd($this->uploadPhoto($photos));
-        foreach($this->uploadPhoto($photos) as $k => $multiPhotoId) {
-            $fbMultipleImg["attached_media[$k]"] = '{"media_fbid":"' . $multiPhotoId . '"}';
-        }
         $fbMultipleImg['message'] = $data['message'];
+        $fbMultipleImg['scheduled_publish_time'] = strtotime($request->datetime);
+//        dd($fbMultipleImg);
+        $fbMultipleImg['published'] = false;
+//        dd($fbMultipleImg);
         try {
 //            dd($fbMultipleImg);
             $page_id = '1943970019218960';
@@ -172,6 +176,7 @@ class GraphController extends Controller
                 'message' => 'Thêm thành công'
             ]);
             $post = $this->api->post('/' . $page_id . '/feed', $fbMultipleImg, $access_token);
+//            dd($post);
             return redirect()->route('admin.PublishPage.list');
 
         } catch (FacebookResponseException $e) {
@@ -194,7 +199,7 @@ class GraphController extends Controller
 //            $uploadImage[$key] = $this->api->post('/'.$page_id.'/photos', ['publish' => 'false', 'source' => $this->api->fileToUpload('http://localhost'.$item)], $access_token);
             try {
                 $results = $this->api->post('/'.$page_id.'/photos', ['published' => 'false', 'source' => $this->api->fileToUpload($item)], $access_token);
-//                $results = $this->api->post('/'.$page_id.'/photos', ['published' => 'false', 'source' => $this->api->fileToUpload("https://localhost".$item)], $access_token);
+//                $results = $this->api->post('/'.$page_id.'/photos', ['published' => 'false', 'source' => $this->api->fileToUpload(env('DOMAIN_URL').'/public'.$item)], $access_token);
                 $multiPhotoId = $results->getDecodedBody();
                 if(!empty($multiPhotoId['id'])) {
                     $fbuploadMultiIdArr[] = $multiPhotoId['id'];
@@ -227,7 +232,7 @@ class GraphController extends Controller
             $fbMultipleImg["attached_media[$k]"] = '{"media_fbid":"' . $multiPhotoId . '"}';
         }
         $fbMultipleImg['message'] = $data['message'];
-//        dd($fbMultipleImg);
+        $fbMultipleImg['published'] = false;
         try {
 //            dd($fbMultipleImg);
             \Session::flash('toastr', [

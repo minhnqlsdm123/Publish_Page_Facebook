@@ -6,7 +6,7 @@
             <div class="title_left"><h3>Danh mục</h3></div>
             <div class="title_right">
                 <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
-                    <form action="{{ route('admin.category.list') }}" method="GET">
+                    <form action="{{ route('admin.PublishPage.list') }}" method="GET">
                         <div class="input-group">
                             <input type="text" class="form-control" name="name" value="{{ \Request::get('name') ?? '' }}" placeholder="Nội dung...">
                             <span class="input-group-btn"><button class="btn btn-default" type="submit"><i class="fa fa-search"> Tìmkiếm</i></button></span>

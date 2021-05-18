@@ -102,7 +102,7 @@
               <div class="col-md-6 col-sm-6 col-xs-12">
                 <div class="">
                   <label>
-                    <input type="checkbox" class="js-switch" name="status" value="1" data-switchery="true"
+                    <input type="checkbox" class="js-switch" name="status" value="" data-switchery="true"
                       style="display: none;">
                     Active
                   </label>

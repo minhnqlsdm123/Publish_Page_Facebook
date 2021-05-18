@@ -36,7 +36,7 @@ class AdminProductController extends BaseController
     }
     public function postAdd(AdminRequestProduct $request)
     {
-//         dd($request->all());
+         dd($request->all());
         // die();
         $product = new Product();
         $product->pro_name = $request->name;
