@@ -10,6 +10,16 @@
         </div>
     </div>
     <div class="form-group">
+        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="change-password">Check đổi
+            mật
+            khẩu
+            <span class="required">*</span>
+        </label>
+        <div class="col-md-6 col-sm-6 col-xs-12">
+            <input type="checkbox" name="upload-photo" id="upload-photo" />
+        </div>
+    </div>
+    <div class="form-group form-upload-photo">
         <label class="control-label col-md-1 col-sm-1 col-xs-3">Ảnh mô tả</label>
         <div class="col-md-11 col-sm-11 col-xs-9">
             <div class="row" style="margin-bottom: 15px;">
@@ -21,7 +31,7 @@
                     <input type="text" name="image_detail[]" value="/backend/build/images/default.jpg" id="image_detail" class="form-control" />
                 </div>
                 <div class="col-md-2">
-                    <div class=" input-group-append">
+                    <div class="input-group-append">
                         <button onclick="open_popup('/filemanager/dialog.php?type=1&popup=1&field_id=image_detail')" class="btn btn-primary" type="button"><i class="fa fa-cloud-upload"></i> Chọn</button>
                         <button class="btn btn-danger reset" data-reset="avatar" type="button"><i class="material-icons"><i class="fa fa-trash"></i> Xóa</i></button>
                     </div>
@@ -44,6 +54,7 @@
                 <option value="2">Unpublish</option>
                 <option value="3">Publish Scheduled</option>
                 </select>
+        </div>
     </div>
 {{--    <div class="ln_solid"></div>--}}
     <div class="form-group">
@@ -54,3 +65,19 @@
         </div>
     </div>
 </form>
+@section('script')
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#upload-photo').change(function() {
+                if ($(this).is(':checked')) {
+                    $('.form-upload-photo').removeAttr('disabled');
+                    $('#confirm_password').removeAttr('disabled');
+                } else {
+                    $('#password').attr('disabled', '');
+                    $('#confirm_password').attr('disabled', '');
+                }
+                return false;
+            });
+        });
+    </script>
+@endsection

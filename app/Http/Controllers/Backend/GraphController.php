@@ -24,7 +24,7 @@ class GraphController extends Controller
     }
 
     public function index() {
-        $posts = Post::paginate(1);
+        $posts = Post::paginate(3);
 //            dd($posts->all());
         return view('backend.PublishPage.index', ['posts' => $posts]);
     }
@@ -173,6 +173,9 @@ class GraphController extends Controller
             $fbMultipleImg['scheduled_publish_time'] = strtotime($request->datetime);
             $fbMultipleImg['published'] = false;
         }
+        if ($request->status == Post::STATUS_UNPUBLISH) {
+            $fbMultipleImg['published'] = false;
+        }
 //        dd($fbMultipleImg);
         try {
 //            dd($fbMultipleImg);
@@ -257,6 +260,19 @@ class GraphController extends Controller
             exit();
         }
     }
+    public function repost($id) {
+        $post = Post::where('id', $id)->first();
+        $this->repostFacebook($post->post_id);
+        $post->published = true;
+        $post->status = Post::STATUS_PUBLISH;
+        if ($post->save()) {
+            \Session::flash('toastr', [
+                'type' => 'success',
+                'message' => 'Xoá thành công'
+            ]);
+            return view('backend.PublishPage.index');
+        }
+    }
 
     public function delete($id) {
         $post = Post::where('id', $id)->first();
@@ -273,7 +289,7 @@ class GraphController extends Controller
                     'type' => 'success',
                     'message' => 'Xoá thành công'
                 ]);
-                return view('backend.PublishPage.list');
+                return view('backend.PublishPage.index');
             } else {
                 \Session::flash('toastr', [
                     'type' => 'danger',
@@ -285,10 +301,17 @@ class GraphController extends Controller
     }
     public function getDeletePostFacebook($post_id) {
 
-        $access_token = $this->getPageAccessToken();
+            $access_token = $this->getPageAccessToken();
             $post_facebook = $this->api->delete('/' . $post_id ,array('message' => 'dasdsa'), $access_token);
             $post_facebook = $post_facebook->getGraphNode();
             return $post_facebook;
+    }
+
+    public function repostFacebook($post_id) {
+        $access_token = $this->getPageAccessToken();
+        $repost_facebook = $this->api->post('/' . $post_id ,array('is_published' => 'true'), $access_token);
+        $repost_facebook = $repost_facebook->getGraphNode();
+        return $repost_facebook;
     }
 
 

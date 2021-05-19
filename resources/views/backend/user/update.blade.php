@@ -93,23 +93,6 @@
                                     @endif
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="confirm_password">Chọn vai
-                                    trò
-                                    <span class="required">*</span>
-                                </label>
-                                <div class="col-md-6 col-sm-6 col-xs-12">
-                                    <select multiple class="form-control" id="role" name="role[]">
-                                        @if (!empty($roles))
-                                        @foreach ($roles as $role)
-                                        <option value="{{ $role->id }}"
-                                            {{ $roleOfUser->contains($role->id) ? "selected" : '' }}>{{ $role->name }}
-                                        </option>
-                                        @endforeach
-                                        @endif
-                                    </select>
-                                </div>
-                            </div>
                             <div class="ln_solid"></div>
                             <div class="form-group">
                                 <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">

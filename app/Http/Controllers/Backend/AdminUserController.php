@@ -14,11 +14,9 @@ use Illuminate\Support\Facades\DB;
 class AdminUserController extends Controller
 {
     private $user;
-    private $role;
-    public function __construct(User $user, Role $role)
+    public function __construct(User $user)
     {
         $this->user = $user;
-        $this->role = $role;
     }
     public function index()
     {
@@ -66,14 +64,15 @@ class AdminUserController extends Controller
     public function getUpdate($id)
     {
         $user = $this->user->findOrFail($id);
-        $roles = $this->role->all();
-        $roleOfUser = $user->roles()->get()->pluck('id');
-        $data = [
-            'user' => $user,
-            'roles' => $roles,
-            'roleOfUser' => $roleOfUser
-        ];
-        return view('backend.user.update', $data);
+//        dd($user);
+//        $roles = $this->role->all();
+//        $roleOfUser = $user->roles()->get()->pluck('id');
+//        $data = [
+//            'user' => $user,
+//            'roles' => $roles,
+//            'roleOfUser' => $roleOfUser
+//        ];
+        return view('backend.user.update', ['user' => $user]);
     }
 
     public function postUpdate(Request $request, $id)
@@ -117,16 +116,6 @@ class AdminUserController extends Controller
             $user->password = Hash::make($request->password);
         }
         $user->save();
-        //Lưu bảng roles_users
-        DB::table('roles_users')->where('user_id', $id)->delete();
-        if ($roles = $request->role) {
-            foreach ($roles as $role) {
-                DB::table('roles_users')->insert([
-                    'user_id' => $id,
-                    'role_id' => $role
-                ]);
-            }
-        }
         return redirect()->route('admin.user.list');
     }
 
@@ -135,7 +124,6 @@ class AdminUserController extends Controller
         $user = $this->user->findOrFail($id);
         try {
             DB::beginTransaction();
-            $user->roles()->detach();
             $user->delete();
             DB::commit();
         } catch (Exception $e) {

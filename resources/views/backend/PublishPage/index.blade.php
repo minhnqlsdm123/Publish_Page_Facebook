@@ -60,17 +60,21 @@
                                     @endif
                                     <td>
                                         @if($post['status'] == 1)
-                                           <a href="a" class="text-success">Published</a>
+                                           <span class="text-success">Published</span>
                                         @elseif($post['status'] == 2)
-                                            <a href="a" class="text-danger">Unpublished</a>
+                                            <span class="text-danger">Unpublished</span>
                                         @else
-                                            <a href="a" class="text-warning">Published Scheduled</a>
+                                            <span class="text-warning">Published Scheduled</span>
                                         @endif
                                     </td>
                                     <td>
-                                        <a href="" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View</a>
+                                        @if($post['status'] == 1 || $post['status'] == 3)
+
                                         <a href="{{ route('admin.PublishPage.update', $post['id']) }}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Sửa </a>
-                                        <a href="{{ route('admin.PublishPage.delete', [$post['id']]) }}" class="btn btn-danger btn-xs" onclick="return confirm('Bạn chắc chắn muốn xóa')"><i  class="fa fa-trash-o"></i> Xóa</a>
+                                            @elseif($post['status'] == 2)
+                                            <a href="{{ route('admin.PublishPage.repost', $post['id']) }}" onclick="return confirm('Bạn chắc chắn muốn đăng lại bài viết')" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i>Dang lai</a>
+                                        @endif
+                                            <a href="{{ route('admin.PublishPage.delete', [$post['id']]) }}" class="btn btn-danger btn-xs" onclick="return confirm('Bạn chắc chắn muốn xóa')"><i  class="fa fa-trash-o"></i> Xóa</a>
                                     </td>
                                 </tr>
                                 @endforeach
