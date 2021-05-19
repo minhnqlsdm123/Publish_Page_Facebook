@@ -28,9 +28,9 @@ Route::prefix('admin')->namespace('Backend')->middleware('AdminCheckLogout')->gr
         Route::get('list', 'AdminUserController@index')->name('admin.user.list');
         Route::get('add', 'AdminUserController@getAdd')->name('admin.user.add');
         Route::post('add', 'AdminUserController@postAdd');
-        Route::get('update/{id}', 'AdminUserController@getUpdate')->middleware('CheckPermission:user-update')->name('admin.user.update');
+        Route::get('update/{id}', 'AdminUserController@getUpdate')->name('admin.user.update');
         Route::post('update/{id}', 'AdminUserController@postUpdate');
-        Route::get('delete/{id}', 'AdminUserController@getDelete')->middleware('CheckPermission:user-delete')->name('admin.user.delete');
+        Route::get('delete/{id}', 'AdminUserController@getDelete')->name('admin.user.delete');
     });
 //    Route::prefix('role')->group(function () {
 //        Route::get('list', 'AdminRoleController@index')->middleware('CheckPermission:role-list')->name('admin.role.list');
@@ -51,13 +51,13 @@ Route::prefix('admin')->namespace('Backend')->middleware('AdminCheckLogout')->gr
 //        Route::get('action/{action}/{id}', 'AdminCategoryController@getAction')->name('admin.category.action');
 //    });
     Route::prefix('page')->group(function () {
-        Route::get('/', 'GraphController@getPostPage')->name('admin.PublishPage.list');
+        Route::get('/', 'GraphController@index')->name('admin.PublishPage.list');
 //        Route::get('/get-data','GraphController@anyData')->name('admin.PublishPage.dataTable');
         Route::get('add', 'GraphController@getAdd')->name('admin.PublishPage.add');
-        Route::post('add', 'GraphController@publishPage');
-        Route::get('update/{id}', 'GraphController@getDetailPostPage')->name('admin.PublishPage.update');
+        Route::post('add', 'GraphController@store');
+        Route::get('update/{id}', 'GraphController@detail')->name('admin.PublishPage.update');
         Route::post('update/{id}', 'GraphController@updatePostPage');
-        Route::get('delete/{id}', 'GraphController@getDelete')->name('admin.PublishPage.delete');
+        Route::get('delete/{id}', 'GraphController@delete')->name('admin.PublishPage.delete');
     });
     Route::prefix('product')->group(function () {
         Route::get('list', 'AdminProductController@index')->name('admin.product.list');

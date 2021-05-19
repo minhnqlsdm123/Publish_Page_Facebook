@@ -45,12 +45,13 @@
                                 </tr>
                             </thead>
                             <tbody>
+{{--                            {{dd($posts)}}--}}
                                 @if (!empty($posts))
                                 @foreach ($posts as $k => $post)
                                 <tr>
                                     <td>{{ $k+1 }}</td>
                                     <td>
-                                        <a>{{ $post['id'] }}</a>
+                                        <a>{{ $post['post_id'] }}</a>
                                     </td>
                                     @if (!empty($post['message']))
                                     <td><a>{{ $post['message'] }}</a></td>
@@ -58,10 +59,12 @@
                                         <td></td>
                                     @endif
                                     <td>
-                                        @if($post['is_published'] == true)
+                                        @if($post['status'] == 1)
                                            <a href="a" class="text-success">Published</a>
-                                        @else
+                                        @elseif($post['status'] == 2)
                                             <a href="a" class="text-danger">Unpublished</a>
+                                        @else
+                                            <a href="a" class="text-warning">Published Scheduled</a>
                                         @endif
                                     </td>
                                     <td>
@@ -74,8 +77,12 @@
                                 @endif
                             </tbody>
                         </table>
+                        <div class="text-center">
+                            {{ $posts->links() }}
+                        </div>
                         <!-- end project list -->
                     </div>
+
                 </div>
             </div>
         </div>

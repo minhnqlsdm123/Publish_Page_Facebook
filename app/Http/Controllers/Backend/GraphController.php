@@ -3,18 +3,13 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\AdminRequestCategory;
 use App\Http\Requests\AdminRequestPublishPage;
-use App\Models\Category;
-use Carbon\Carbon;
+use App\Models\Files;
+use App\Models\Post;
 use Facebook\Facebook;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Str;
-use Yajra\DataTables\Contracts\DataTable;
-//use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class GraphController extends Controller
 {
@@ -28,32 +23,69 @@ class GraphController extends Controller
         });
     }
 
-    public function retrieveUserProfile(){
-        try {
-
-            $params = "first_name,last_name,age_range,gender";
-
-            $user = $this->api->get('/me?fields='.$params)->getGraphUser();
-
-            dd($user);
-
-        } catch (FacebookSDKException $e) {
-
-        }
-
+    public function index() {
+        $posts = Post::paginate(1);
+//            dd($posts->all());
+        return view('backend.PublishPage.index', ['posts' => $posts]);
     }
 
-    public function publishToProfile(Request $request){
-        try {
-            $response = $this->api->post('/me/feed', [
-                'message' => $request->message
-            ])->getGraphNode()->asArray();
-            if($response['id']){
-                // post created
-            }
-        } catch (FacebookSDKException $e) {
-            dd($e); // handle exception
+    public function store(AdminRequestPublishPage $request) {
+//        dd($request->all());
+        $photos = [
+            'https://data.webnhiepanh.com/wp-content/uploads/2020/11/21105259/phong-canh.jpg',
+            'https://data.webnhiepanh.com/wp-content/uploads/2020/11/21105555/phong-canh-3.jpg',
+            'https://data.webnhiepanh.com/wp-content/uploads/2020/11/21105809/phong-canh-4.jpg'
+        ];
+        $request->image_detail = $photos;
+        $post = new Post();
+        $post_facebook = $this->publishPage($request);
+        $post->message = $request->message;
+        $post->post_id = $post_facebook['id'];
+        $post->status = $request->status;
+        if ($request->datetime) {
+            $post->status = Post::STATUS_PUBLISH_SCHEDULED;
+            $post->published = false;
+        } else {
+              if ($request->status == Post::STATUS_PUBLISH) {
+                  $post->published = true;
+              } else if($request->status == Post::STATUS_UNPUBLISH) {
+                  $post->published = false;
+              }
         }
+
+            if ($post->save()) {
+//                $photos = $request->image_detail;
+                if ($photos) {
+                    foreach ($photos as $item) {
+                        $file = new Files();
+                        $file->url = $item;
+                        $file->type = 'IMG';
+                        $file->post_id = $post->id;
+                        if (!$file->save()) {
+                            \Session::flash('toastr', [
+                                'type' => 'danger',
+                                'message' => 'Có lỗi khi thêm ảnh'
+                            ]);
+                        }
+                    }
+                }
+                DB::commit();
+                \Session::flash('toastr', [
+                    'type'    => 'success',
+                    'message' => 'Thêm thành công'
+                ]);
+                return redirect()->route('admin.product.list')->withInput();
+            } else {
+                \Session::flash('toastr', [
+                    'type'    => 'error',
+                    'message' => 'Xử lí thất bại'
+                ]);
+                return redirect()->back()->withInput();
+            }
+    }
+    public function detail($id) {
+        $post = Post::where('id', $id)->with('file')->first();
+        return view('backend.PublishPage.update', ['post' => $post]);
     }
 
     public function getPageId() {
@@ -95,36 +127,6 @@ class GraphController extends Controller
         return view('backend.PublishPage.add');
     }
 
-    public function getPostPage() {
-        $page_id = '1943970019218960';
-        $access_token = $this->getPageAccessToken();
-        $fields = "id,message,attachments,is_published";
-        $posts = $this->api->get('/' . $page_id . '/feed?fields='.$fields, $access_token);
-        $posts = $posts->getGraphEdge()->asArray();
-        return view('backend.PublishPage.index', ['posts' => $posts]);
-
-//        return view('backend.PublishPage.index');
-
-    }
-
-    public function anyData()
-    {
-        $page_id = '1943970019218960';
-        $access_token = $this->getPageAccessToken();
-        $posts = $this->api->get('/' . $page_id . '/feed', $access_token);
-        $posts = $posts->getGraphEdge()->asArray();
-//        $link= "route('admin.PublishPage.update',".$post['id'].")";
-
-//        dd($posts);
-        return datatables()->of($posts)
-            ->make(true);
-
-//            ->addColumn('action',function($post) {
-//                return '<a href="/admin/page/" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Sửa </a>';
-//            })
-//            ->make(true);
-    }
-
     public function getDetailPostPage($id) {
         $page_id = '1943970019218960';
         $access_token = $this->getPageAccessToken();
@@ -145,9 +147,9 @@ class GraphController extends Controller
     }
 
 
-    public function publishPage(AdminRequestPublishPage $request) {
+    public function publishPage( $request) {
 
-
+//        dd($request->all());
         $data = [];
 
         $data['message'] = $request->message;
@@ -160,24 +162,26 @@ class GraphController extends Controller
             'https://data.webnhiepanh.com/wp-content/uploads/2020/11/21105555/phong-canh-3.jpg',
             'https://data.webnhiepanh.com/wp-content/uploads/2020/11/21105809/phong-canh-4.jpg'
         ];
-//        $photos = $request->image_detail;
         $fbMultipleImg = array();
+        if ($photos != null) {
+            foreach($this->uploadPhoto($photos) as $k => $multiPhotoId) {
+                $fbMultipleImg["attached_media[$k]"] = '{"media_fbid":"' . $multiPhotoId . '"}';
+            }
+        }
         $fbMultipleImg['message'] = $data['message'];
-        $fbMultipleImg['scheduled_publish_time'] = strtotime($request->datetime);
-//        dd($fbMultipleImg);
-        $fbMultipleImg['published'] = false;
+        if ($request->datetime) {
+            $fbMultipleImg['scheduled_publish_time'] = strtotime($request->datetime);
+            $fbMultipleImg['published'] = false;
+        }
 //        dd($fbMultipleImg);
         try {
 //            dd($fbMultipleImg);
             $page_id = '1943970019218960';
             $access_token = $this->getPageAccessToken();
-            \Session::flash('toastr', [
-                'type' => 'success',
-                'message' => 'Thêm thành công'
-            ]);
             $post = $this->api->post('/' . $page_id . '/feed', $fbMultipleImg, $access_token);
+            $post = $post->getGraphNode()->asArray();
 //            dd($post);
-            return redirect()->route('admin.PublishPage.list');
+            return $post;
 
         } catch (FacebookResponseException $e) {
             // showing error message
@@ -195,8 +199,6 @@ class GraphController extends Controller
         $access_token = $this->getPageAccessToken();
         $fbuploadMultiIdArr = array();
         foreach ($fbtargetPath as $key => $item) {
-//            dd($this->api->fileToUpload('http://localhost'.$item));
-//            $uploadImage[$key] = $this->api->post('/'.$page_id.'/photos', ['publish' => 'false', 'source' => $this->api->fileToUpload('http://localhost'.$item)], $access_token);
             try {
                 $results = $this->api->post('/'.$page_id.'/photos', ['published' => 'false', 'source' => $this->api->fileToUpload($item)], $access_token);
 //                $results = $this->api->post('/'.$page_id.'/photos', ['published' => 'false', 'source' => $this->api->fileToUpload(env('DOMAIN_URL').'/public'.$item)], $access_token);
@@ -205,7 +207,6 @@ class GraphController extends Controller
                     $fbuploadMultiIdArr[] = $multiPhotoId['id'];
                 }
             } catch (FacebookResponseException $e) {
-                // showing error message
                 //print $e->getMessage();
                 exit();
             } catch (FacebookSDKException $e) {
@@ -257,11 +258,65 @@ class GraphController extends Controller
         }
     }
 
-    public function getDelete($id) {
-        $page_id = '1943970019218960';
-        $access_token = $this->getPageAccessToken();
-        $post = $this->api->delete('/' . $id ,array('message' => 'dasdsa'), $access_token);
-        $post = $post->getGraphNode();
-        return redirect()->route('admin.PublishPage.list');
+    public function delete($id) {
+        $post = Post::where('id', $id)->first();
+        $this->getDeletePostFacebook($post->post_id);
+        if ($post) {
+            if ($post->delete()) {
+                $files = Files::where('post_id', $post->id)->get();
+                if ($files) {
+                    foreach ($files as $file) {
+                        $file->delete();
+                    }
+                }
+                \Session::flash('toastr', [
+                    'type' => 'success',
+                    'message' => 'Xoá thành công'
+                ]);
+                return view('backend.PublishPage.list');
+            } else {
+                \Session::flash('toastr', [
+                    'type' => 'danger',
+                    'message' => 'Xóa thất bại'
+                ]);
+            }
+        }
+
     }
+    public function getDeletePostFacebook($post_id) {
+
+        $access_token = $this->getPageAccessToken();
+            $post_facebook = $this->api->delete('/' . $post_id ,array('message' => 'dasdsa'), $access_token);
+            $post_facebook = $post_facebook->getGraphNode();
+            return $post_facebook;
+    }
+
+
+//    public function retrieveUserProfile(){
+//        try {
+//
+//            $params = "first_name,last_name,age_range,gender";
+//
+//            $user = $this->api->get('/me?fields='.$params)->getGraphUser();
+//
+//            dd($user);
+//
+//        } catch (FacebookSDKException $e) {
+//
+//        }
+//
+//    }
+//
+//    public function publishToProfile(Request $request){
+//        try {
+//            $response = $this->api->post('/me/feed', [
+//                'message' => $request->message
+//            ])->getGraphNode()->asArray();
+//            if($response['id']){
+//                // post created
+//            }
+//        } catch (FacebookSDKException $e) {
+//            dd($e); // handle exception
+//        }
+//    }
 }

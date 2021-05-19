@@ -39,14 +39,14 @@
                             <div class="form-group">
                                 <label class="control-label col-md-1 col-sm-1 col-xs-4">Ảnh mô tả</label>
                                 <div class="col-md-11 col-sm-11 col-xs-9">
-                                    @foreach($post['src_photos'] as $k => $image)
+                                    @foreach($post->file as $k => $item)
                                         <div class="row" style="margin-bottom: 15px;">
                                             <div class="col-md-2">
                                                 <img id="image-preview-image_detail{{ $k }}" class="img-fluid"
-                                                     src="{{ $image ?? '/backend/build/images/default.jpg' }}">
+                                                     src="{{ $item->url ?? '/backend/build/images/default.jpg' }}">
                                             </div>
                                             <div class="col-md-8">
-                                                <input type="text" name="image_detail[]" value="{{ $image }}"
+                                                <input type="text" name="image_detail[]" value="{{ $item->url }}"
                                                        id="image_detail{{ $k }}" class="form-control" />
                                             </div>
                                             <div class="col-md-2">
@@ -56,9 +56,7 @@
                                                         class="btn btn-primary" type="button"><i class="fa fa-cloud-upload"></i>
                                                         Chọn</button>
                                                     <button class="btn btn-danger remove-input"
-                                                            data-reset="image_detail{{ $k }}" type="button"><i
-                                                            class="material-icons"><i class="fa fa-trash"></i>
-                                                            Xóa</i></button>
+                                                            data-reset="image_detail{{ $k }}" type="button"><i class="material-icons"><i class="fa fa-trash"></i>Xóa</i></button>
                                                 </div>
                                             </div>
                                         </div>
