@@ -7,6 +7,7 @@ use App\Http\Requests\AdminRequestPublishPage;
 use App\Models\Files;
 use App\Models\Post;
 use Facebook\Facebook;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -33,8 +34,8 @@ class GraphController extends Controller
 //        dd($request->all());
         $photos = [
             'https://data.webnhiepanh.com/wp-content/uploads/2020/11/21105259/phong-canh.jpg',
-            'https://data.webnhiepanh.com/wp-content/uploads/2020/11/21105555/phong-canh-3.jpg',
-            'https://data.webnhiepanh.com/wp-content/uploads/2020/11/21105809/phong-canh-4.jpg'
+//            'https://data.webnhiepanh.com/wp-content/uploads/2020/11/21105555/phong-canh-3.jpg',
+//            'https://data.webnhiepanh.com/wp-content/uploads/2020/11/21105809/phong-canh-4.jpg'
         ];
         $request->image_detail = $photos;
         $post = new Post();
@@ -54,18 +55,20 @@ class GraphController extends Controller
         }
 
             if ($post->save()) {
-//                $photos = $request->image_detail;
+                $photos = $request->image_detail;
                 if ($photos) {
                     foreach ($photos as $item) {
-                        $file = new Files();
-                        $file->url = $item;
-                        $file->type = 'IMG';
-                        $file->post_id = $post->id;
-                        if (!$file->save()) {
-                            \Session::flash('toastr', [
-                                'type' => 'danger',
-                                'message' => 'Có lỗi khi thêm ảnh'
-                            ]);
+                        if ($item) {
+                            $file = new Files();
+                            $file->url = $item;
+                            $file->type = 'IMG';
+                            $file->post_id = $post->id;
+                            if (!$file->save()) {
+                                \Session::flash('toastr', [
+                                    'type' => 'danger',
+                                    'message' => 'Có lỗi khi thêm ảnh'
+                                ]);
+                            }
                         }
                     }
                 }
@@ -74,7 +77,7 @@ class GraphController extends Controller
                     'type'    => 'success',
                     'message' => 'Thêm thành công'
                 ]);
-                return redirect()->route('admin.product.list')->withInput();
+                return redirect()->route('admin.PublishPage.list')->withInput();
             } else {
                 \Session::flash('toastr', [
                     'type'    => 'error',
@@ -86,6 +89,65 @@ class GraphController extends Controller
     public function detail($id) {
         $post = Post::where('id', $id)->with('file')->first();
         return view('backend.PublishPage.update', ['post' => $post]);
+    }
+
+    public function update(Request $request, $id) {
+        $post = Post::where('id', $id)->first();
+        if ($post) {
+            $request->post_id = $post->post_id;
+            $photos = [
+                'https://data.webnhiepanh.com/wp-content/uploads/2020/11/21105259/phong-canh.jpg',
+            'https://data.webnhiepanh.com/wp-content/uploads/2020/11/21105555/phong-canh-3.jpg',
+            'https://data.webnhiepanh.com/wp-content/uploads/2020/11/21105809/phong-canh-4.jpg'
+            ];
+//            $photos = $request->image_detail;
+//            $page_id = '1943970019218960';
+            $access_token = $this->getPageAccessToken();
+            $fbMultipleImg = array();
+            if ($photos != null) {
+                foreach($this->uploadPhoto($photos) as $k => $multiPhotoId) {
+                    $fbMultipleImg["attached_media[$k]"] = '{"media_fbid":"' . $multiPhotoId . '"}';
+                }
+            }
+            $fbMultipleImg['message'] = $request->message;
+            if ($request->datetime) {
+                $fbMultipleImg['scheduled_publish_time'] = strtotime($request->datetime);
+                $fbMultipleImg['published'] = false;
+            }
+            if ($request->status == Post::STATUS_UNPUBLISH) {
+                $fbMultipleImg['published'] = false;
+            }
+            $access_token = $this->getPageAccessToken();
+            $post = $this->api->post('/' . $request->post_id, $fbMultipleImg, $access_token);
+            $post->message = $request->message;
+            if ($photos) {
+                $files = Files::where('post_id', $post->id)->get();
+                if ($files) {
+                    foreach ($files as $file) {
+                        if (!$file->delete()) {
+                            \Session::flash('toastr', [
+                                'type' => 'danger',
+                                'message' => 'Có lỗi khi Cap nhat anh'
+                            ]);
+                        }
+                    }
+                }
+                foreach ($photos as $item) {
+                    if ($item) {
+                        $file = new Files();
+                        $file->url = $item;
+                        $file->type = 'IMG';
+                        $file->post_id = $post->id;
+                        if (!$file->save()) {
+                            \Session::flash('toastr', [
+                                'type' => 'danger',
+                                'message' => 'Có lỗi khi Cap nhat anh'
+                            ]);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public function getPageId() {
@@ -127,24 +189,6 @@ class GraphController extends Controller
         return view('backend.PublishPage.add');
     }
 
-    public function getDetailPostPage($id) {
-        $page_id = '1943970019218960';
-        $access_token = $this->getPageAccessToken();
-        $fields = "id,message,attachments,is_published";
-        $post = $this->api->get('/' . $id .'?fields='.$fields, $access_token);
-//        dd($post);
-        $post = $post->getGraphNode()->asArray();
-//        dd(empty($post['attachments']));
-        $src_photos = [];
-        if (!empty($post['attachments'][0]['subattachments'])) {
-            foreach ($post['attachments'][0]['subattachments'] as $item) {
-                $src_photos[] = $item['media']['image']['src'];
-            }
-        }
-        $post['src_photos'] = $src_photos;
-        return view('backend.PublishPage.update', ['post' => $post]);
-
-    }
 
 
     public function publishPage( $request) {
@@ -154,14 +198,9 @@ class GraphController extends Controller
 
         $data['message'] = $request->message;
 
-//        $data['photos'] = $request->image_detail;
+        $photos = $request->image_detail;
         $page_id = '1943970019218960';
         $access_token = $this->getPageAccessToken();
-        $photos = [
-            'https://data.webnhiepanh.com/wp-content/uploads/2020/11/21105259/phong-canh.jpg',
-            'https://data.webnhiepanh.com/wp-content/uploads/2020/11/21105555/phong-canh-3.jpg',
-            'https://data.webnhiepanh.com/wp-content/uploads/2020/11/21105809/phong-canh-4.jpg'
-        ];
         $fbMultipleImg = array();
         if ($photos != null) {
             foreach($this->uploadPhoto($photos) as $k => $multiPhotoId) {
@@ -181,8 +220,10 @@ class GraphController extends Controller
 //            dd($fbMultipleImg);
             $page_id = '1943970019218960';
             $access_token = $this->getPageAccessToken();
-            $post = $this->api->post('/' . $page_id . '/feed', $fbMultipleImg, $access_token);
-            $post = $post->getGraphNode()->asArray();
+
+                $post = $this->api->post('/' . $page_id . '/feed', $fbMultipleImg, $access_token);
+                $post = $post->getGraphNode()->asArray();
+
 //            dd($post);
             return $post;
 
@@ -202,19 +243,27 @@ class GraphController extends Controller
         $access_token = $this->getPageAccessToken();
         $fbuploadMultiIdArr = array();
         foreach ($fbtargetPath as $key => $item) {
-            try {
-                $results = $this->api->post('/'.$page_id.'/photos', ['published' => 'false', 'source' => $this->api->fileToUpload($item)], $access_token);
-//                $results = $this->api->post('/'.$page_id.'/photos', ['published' => 'false', 'source' => $this->api->fileToUpload(env('DOMAIN_URL').'/public'.$item)], $access_token);
-                $multiPhotoId = $results->getDecodedBody();
-                if(!empty($multiPhotoId['id'])) {
-                    $fbuploadMultiIdArr[] = $multiPhotoId['id'];
+            if ($item) {
+                $info_file = pathinfo($item);
+                try {
+                    if ($info_file['extension'] == 'jpg' || $info_file['extension'] == 'png' || $info_file['extension'] == 'pjpeg') {
+                        $results = $this->api->post('/'.$page_id.'/photos', ['published' => 'false', 'source' => $this->api->fileToUpload($item)], $access_token);
+//                      $results = $this->api->post('/'.$page_id.'/photos', ['published' => 'false', 'source' => $this->api->fileToUpload(env('DOMAIN_URL').'/public'.$item)], $access_token);
+                    }
+                    if ($info_file['extension'] == 'mp4') {
+                        $results = $this->api->post('/'.$page_id.'/photos', ['published' => 'false', 'source' => $this->api->videoToUpload(env('DOMAIN_URL').'/public'.$item)], $access_token);
+                    }
+                    $multiPhotoId = $results->getDecodedBody();
+                    if(!empty($multiPhotoId['id'])) {
+                        $fbuploadMultiIdArr[] = $multiPhotoId['id'];
+                    }
+                } catch (FacebookResponseException $e) {
+                    //print $e->getMessage();
+                    exit();
+                } catch (FacebookSDKException $e) {
+                    //print $e->getMessage();
+                    exit();
                 }
-            } catch (FacebookResponseException $e) {
-                //print $e->getMessage();
-                exit();
-            } catch (FacebookSDKException $e) {
-                //print $e->getMessage();
-                exit();
             }
         }
         return $fbuploadMultiIdArr;
@@ -223,7 +272,8 @@ class GraphController extends Controller
     public function updatePostPage(AdminRequestPublishPage $request, $id) {
         $data = [];
         $data['message'] = $request->message;
-        $data['post_id'] = $id;
+        $post = Post::where('id', $id)->first();
+        $data['post_id'] = $post->post_id;
 
         $photos = [
             'https://data.webnhiepanh.com/wp-content/uploads/2020/11/21105259/phong-canh.jpg',
@@ -232,9 +282,9 @@ class GraphController extends Controller
 //        $photos = $request->image_detail;
         $fbMultipleImg = array();
 //        dd($this->uploadPhoto($photos));
-        foreach($this->uploadPhoto($photos) as $k => $multiPhotoId) {
-            $fbMultipleImg["attached_media[$k]"] = '{"media_fbid":"' . $multiPhotoId . '"}';
-        }
+//        foreach($this->uploadPhoto($photos) as $k => $multiPhotoId) {
+//            $fbMultipleImg["attached_media[$k]"] = '{"media_fbid":"' . $multiPhotoId . '"}';
+//        }
         $fbMultipleImg['message'] = $data['message'];
         $fbMultipleImg['published'] = false;
         try {
@@ -244,7 +294,7 @@ class GraphController extends Controller
                 'message' => 'Cập nhật thành công'
             ]);
             $access_token = $this->getPageAccessToken();
-//            dd($this->api->post('/' . $data['post_id'], $fbMultipleImg, $access_token));
+            dd($this->api->post('/' . $data['post_id'], $fbMultipleImg, $access_token));
             $post = $this->api->post('/' . $data['post_id'], $fbMultipleImg, $access_token);
 //        $post = $this->api->get('/' . $page_id . '/feed', $access_token);
 //            $post = $post->getGraphNode()->asArray();

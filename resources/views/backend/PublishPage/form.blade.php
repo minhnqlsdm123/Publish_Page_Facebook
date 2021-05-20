@@ -23,11 +23,11 @@
         <label class="control-label col-md-1 col-sm-1 col-xs-3">Ảnh mô tả</label>
         <div class="col-md-11 col-sm-11 col-xs-9">
             <div class="row" style="margin-bottom: 15px;">
-                <div class="col-md-4">
+                <div class="col-md-2">
                     <img id="image-preview-image_detail" class="img-fluid" src='/backend/build/images/default.jpg'>
 {{--                    <img id="image-preview-image_detail" class="img-fluid" src='{{ old('message', $post['src_photos'][0] ?? '') }}'>--}}
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-8">
                     <input type="text" name="image_detail[]" value="/backend/build/images/default.jpg" id="image_detail" class="form-control" />
                 </div>
                 <div class="col-md-2">
