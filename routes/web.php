@@ -38,7 +38,7 @@ Route::prefix('admin')->namespace('Backend')->middleware('AdminCheckLogout')->gr
         Route::get('add', 'GraphController@getAdd')->name('admin.PublishPage.add');
         Route::post('add', 'GraphController@store');
         Route::get('update/{id}', 'GraphController@detail')->name('admin.PublishPage.update');
-        Route::post('update/{id}', 'GraphController@updatePostPage');
+        Route::post('update/{id}', 'GraphController@update');
         Route::get('repost/{id}', 'GraphController@repost')->name('admin.PublishPage.repost');
         Route::get('delete/{id}', 'GraphController@delete')->name('admin.PublishPage.delete');
     });

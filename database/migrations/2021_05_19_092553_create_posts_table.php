@@ -17,7 +17,7 @@ class CreatePostsTable extends Migration
             $table->bigIncrements('id');
             $table->string('post_id');
             $table->text('message');
-            $table->dateTime('published_time');
+            $table->dateTime('published_time')->nullable();
             $table->integer('status');
             $table->boolean('published');
             $table->timestamps();

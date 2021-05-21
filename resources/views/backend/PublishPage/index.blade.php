@@ -11,8 +11,8 @@
                 <div class="col-md-6 col-sm-6 col-xs-12 form-group pull-right top_search">
                     <form action="" method="GET">
                         <div class="input-group">
-                            <input type="text" class="form-control" name="name"
-                                value="{{ \Request::get('name') ?? '' }}" placeholder="Nội dung...">
+                            <input type="text" class="form-control" name="message"
+                                value="" placeholder="Nội dung...">
                             <span class="input-group-btn">
                                 <button class="btn btn-default" type="submit"><i class="fa fa-search"> Tìm
                                         kiếm</i></button>

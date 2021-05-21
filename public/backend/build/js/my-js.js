@@ -1,7 +1,9 @@
 //hien thi anh upload
 function responsive_filemanager_callback(index) {
     var url = $('#' + index).val() + '?v=' + Date.now();
+    alert(url);
     $("img#image-preview-" + index).attr("src", url);
+    $("source#video-preview-"+index).attr("src", url);
 }
 
 //function open popup for filemanager
