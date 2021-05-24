@@ -39,7 +39,6 @@
                                 <tr>
                                     <th style="width: 1%">#</th>
                                     <th style="width: 20%">Họ và tên</th>
-                                    <th style="width: 20%">Vai trò</th>
                                     <th>Email</th>
                                     <th>Ngày tạo</th>
                                     <th style="width: 20%">Hành động</th>
@@ -52,17 +51,16 @@
                                 <tr>
                                     <td>{{ $k+1 }}</td>
                                     <td>{{ $user->name }}</td>
-                                    <td>Admin</td>
                                     <td>{{ $user->email}}</td>
                                     <td>{{ $user->created_at}}</td>
                                     <td>
                                         <a href="{{ route('admin.user.update', $user->id) }}"
                                             class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Sửa </a>
-                                        <a href="{{ route('admin.user.delete', $user->id) }}"
-                                            class="btn btn-danger btn-xs"
-                                            onclick="return confirm('Bạn chắc chắn muốn xóa')"><i
-                                                class="fa fa-trash-o"></i> Xóa
-                                        </a>
+{{--                                        <a href="{{ route('admin.user.delete', $user->id) }}"--}}
+{{--                                            class="btn btn-danger btn-xs"--}}
+{{--                                            onclick="return confirm('Bạn chắc chắn muốn xóa')"><i--}}
+{{--                                                class="fa fa-trash-o"></i> Xóa--}}
+{{--                                        </a>--}}
                                     </td>
                                 </tr>
 

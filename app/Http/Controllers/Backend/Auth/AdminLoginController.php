@@ -24,7 +24,7 @@ class AdminLoginController extends Controller
                 'type' => 'success',
                 'message' => 'Xin chào'
             ]);
-            return redirect()->route('admin.dasboard');
+            return redirect()->route('admin.PublishPage.list');
         } else {
              \Session::flash('toastr', [
                 'type' => 'error',

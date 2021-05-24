@@ -96,11 +96,7 @@
                             <div class="ln_solid"></div>
                             <div class="form-group">
                                 <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                                    <a href="{{ route('admin.user.list') }}" class="btn btn-info" type="button"><i
-                                            class="fa fa-list"></i>
-                                        Danh sách</a>
-
-                                    <a href="{{ route('admin.user.add') }}" class="btn btn-warning" type="reset"><i
+                                        <a href="{{ route('admin.user.update',$user->id) }}" class="btn btn-warning" type="reset"><i
                                             class="fa fa-rotate-left"></i> Làm
                                         mới</a>
                                     <button type="submit" class="btn btn-success"><i class="fa fa-edit"></i> Lưu
