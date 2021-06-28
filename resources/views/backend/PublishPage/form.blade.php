@@ -1,30 +1,55 @@
 <form class="form-horizontal form-label-left" action="" method="POST" enctype="multipart/form-data">
     @csrf
-    <div class="form-group @if ($errors->has('message')) bad @endif">
-         <label class="form-label col-md-1 col-sm-1 col-xs-3">Nội dung<span class="required"> *</span></label>
+    <div class="form-group @if ($errors->has('page_id')) bad @endif">
+        <label class="form-label col-md-2 col-sm-2 col-xs-3">Trang<span class="text-danger"> *</span></label>
         <div class="col-md-10 col-sm-6 col-xs-12" >
-            <input type="text" id="message" name="message" value="{{ old('message', $post['message'] ?? '') }}" class="form-control col-md-10 col-xs-12" />
-            @if ($errors->has('message'))
-                <p class="text-danger">{{ $errors->first('message') }}</p>
+            <ul class="nav navbar-nav navbar-left">
+                @if (!empty($pages))
+                    @foreach($pages as $page)
+                        <li class="">
+                            <div class="row">
+                                <div class="col-md-1"><input type="radio" name="page_id" class="" value="{{ $page['id'] }}"  style=""/></div>
+                                <div class="col-md-9">
+                                    <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown"
+                                       aria-expanded="false">
+                                        <img src="{{ $page['picture']['url'] }}" alt="">
+                                    </a>
+                                </div>
+                            </div>
+                        </li>
+                    @endforeach
+                @endif
+            </ul>
+            @if ($errors->has('page_id'))
+                <span class="text-danger">{{ $errors->first('page_id') }}</span>
+            @endif
+        </div>
+    </div>
+    <div class="form-group @if ($errors->has('content')) bad @endif">
+         <label class="form-label col-md-2 col-sm-2 col-xs-3">Nội dung<span class="text-danger"> *</span></label>
+        <div class="col-md-9 col-sm-6 col-xs-12" >
+            <input type="text" id="content" name="content" value="{{ old('content', $post['content'] ?? '') }}" class="form-control col-md-10 col-xs-12" />
+            @if ($errors->has('content'))
+                <p class="text-danger">{{ $errors->first('content') }}</p>
             @endif
         </div>
     </div>
     <div class="form-group">
-        <label class="form-label col-md-1 col-sm-1 col-xs-3">Đăng Video</label>
-        <div class="col-md-1 col-sm-2 col-xs-2">
+        <label class="form-label col-md-2 col-sm-1 col-xs-3">Đăng Video</label>
+        <div class="col-md-2 col-sm-2 col-xs-2">
             <input type="checkbox" name="upload_video" class="form-control upload-video"  style="padding: 0px; width: 20px; height: 20px"/>
         </div>
     </div>
     <div class="form-group form-upload-photo">
-        <label class="form-label col-md-1 col-sm-1 col-xs-3">Ảnh mô tả</label>
-        <div class="col-md-11 col-sm-11 col-xs-9">
+        <label class="form-label col-md-2 col-sm-2 col-xs-3">Ảnh mô tả</label>
+        <div class="col-md-10 col-sm-11 col-xs-9">
             <div class="row" style="margin-bottom: 15px;">
-                <div class="col-md-2">
+                <div class="col-md-5">
                     <img id="image-preview-image_detail" class="img-fluid" src='/backend/build/images/default.jpg'>
 {{--                    <img id="image-preview-image_detail" class="img-fluid" src='{{ old('message', $post['src_photos'][0] ?? '') }}'>--}}
                 </div>
-                <div class="col-md-8">
-                    <input type="text" name="image_detail[]" value="" id="image_detail" class="form-control" />
+                <div class="col-md-7">
+                    <input type="text" name="image_detail[]" value="" id="image_detail" class="form-control hidden" />
                 </div>
                 <div class="col-md-2">
                     <div class="input-group-append">
@@ -37,17 +62,16 @@
         </div>
     </div>
     <div class="form-group form-upload-video hidden">
-        <label class="form-label col-md-1 col-sm-1 col-xs-3">Video</label>
-        <div class="col-md-11 col-sm-11 col-xs-9">
+        <label class="form-label col-md-2 col-sm-2 col-xs-3">Video</label>
+        <div class="col-md-10 col-sm-11 col-xs-9">
             <div class="row">
-                <div class="col-md-2">
-
-                    <video  style="width: 218px" controls>
+                <div class="col-md-5">
+                    <video  style="width: 500px" controls>
                         <source id="video-preview-video" src="" class="image-fluid" type="video/mp4">
                     </video>
                 </div>
-                <div class="col-md-8">
-                    <input type="text" name="video" value="" id="video" class="form-control" />
+                <div class="col-md-7">
+                    <input type="text" name="video" value="" id="video" class="form-control hidden" />
                 </div>
                 <div class="col-md-2">
                     <div class=" input-group-append">
@@ -58,20 +82,20 @@
         </div>
     </div>
     <div class="form-group">
-        <label class="form-label col-md-1 col-sm-1 col-xs-3">Đăng Lập lịch</label>
-        <div class="col-md-1 col-sm-2 col-xs-2">
+        <label class="form-label col-md-2 col-sm-2 col-xs-3">Đăng Lập lịch</label>
+        <div class="col-md-2 col-sm-2 col-xs-2">
             <input type="checkbox" name="publish-scheduled" class="form-control publish-scheduled"  style="padding: 0px; width: 20px; height: 20px"/>
         </div>
     </div>
     <div class="form-group date-time hidden">
-        <label class="control-label col-md-1 col-sm-1 col-xs-3">Thoi gian</label>
-        <div class="col-md-9 col-sm-6 col-xs-12" >
+        <label class="form-label col-md-2 col-sm-2 col-xs-3">Thời gian</label>
+        <div class="col-md-9 col-sm-9 col-xs-12" >
             <input type="datetime-local" id="datetime" name="datetime" class="form-control col-md-10 col-xs-12" />
         </div>
     </div>
     <div class="form-group status">
-        <label class="form-label col-md-1 col-sm-1 col-xs-3">Trạng thái</label>
-        <div class="col-md-6 col-sm-6 col-xs-12">
+        <label class="form-label col-md-2 col-sm-2 col-xs-3">Trạng thái</label>
+        <div class="col-md-9 col-sm-9 col-xs-12">
             <select name="status" id="status" class="form-control">
                 <option value="1">Publish</option>
                 <option value="2">Unpublish</option>
@@ -110,6 +134,13 @@
                     $('.status').removeClass('hidden');
                 }
             })
+
+            var start = new Date();
+            var end = new Date(start.getTime() + 20*60*1000);
+            console.log(start, end);
+            $('#datetimepicker').datetimepicker({
+                minDate:end
+            });
         });
     </script>
 @endsection

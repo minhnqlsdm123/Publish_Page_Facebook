@@ -1,7 +1,6 @@
 //hien thi anh upload
 function responsive_filemanager_callback(index) {
     var url = $('#' + index).val() + '?v=' + Date.now();
-    alert(url);
     $("img#image-preview-" + index).attr("src", url);
     $("source#video-preview-"+index).attr("src", url);
 }
@@ -28,5 +27,5 @@ $(document).on('click', '.remove-input', function(event) {
 //add form upload image
 function addImage(object, name, akey) {
     var id = Date.now();
-    $(object).before('<div class="row" style="margin-bottom: 15px;"><div class="col-md-2"><img id="image-preview-' + id + '" class="img-fluid" src="/backend/build/images/default.jpg"></div><div class="col-md-8"><input type="text" name="' + name + '[]" id="' + id + '" value="/backend/build/images/default.jpg" class="form-control" /></div><div class="col-md-2"><div class="input-group-append"><button onclick="open_popup(\'/filemanager/dialog.php?type=1&popup=1&field_id=' + id + '&akey=' + akey + '\')" class="btn btn-primary" type="button"><i class="fa fa-cloud-upload"></i> Chọn</button> <button class="btn btn-danger remove-input" data-reset="' + id + '" type="button"><i class="material-icons"><i class="fa fa-trash"></i> Xóa</i></button></div></div></div> ');
+    $(object).before('<div class="row" style="margin-bottom: 15px;"><div class="col-md-5"><img id="image-preview-' + id + '" class="img-fluid" src="/backend/build/images/default.jpg"></div><div class="col-md-7"><input type="text" name="' + name + '[]" id="' + id + '" value="/backend/build/images/default.jpg" class="form-control hidden" /></div><div class="col-md-2"><div class="input-group-append"><button onclick="open_popup(\'/filemanager/dialog.php?type=1&popup=1&field_id=' + id + '&akey=' + akey + '\')" class="btn btn-primary" type="button"><i class="fa fa-cloud-upload"></i> Chọn</button> <button class="btn btn-danger remove-input" data-reset="' + id + '" type="button"><i class="material-icons"><i class="fa fa-trash"></i> Xóa</i></button></div></div></div> ');
 }

@@ -116,6 +116,10 @@ class AdminUserController extends Controller
             $user->password = Hash::make($request->password);
         }
         $user->save();
+        \Session::flash('toastr', [
+            'type'    => 'success',
+            'message' => 'Cập nhật thành công'
+        ]);
         return redirect()->route('admin.user.list');
     }
 

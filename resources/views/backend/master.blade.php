@@ -35,7 +35,9 @@
     <link href="{{ asset('backend/build/css/toastr.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('backend/build/css/style.css') }}" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css" />
-    @yield('css')
+    <style>
+        @yield('css')
+    </style>
     <!-- Custom Theme Style -->
     <link href="{{ asset('backend/build/css/custom.min.css') }}" rel="stylesheet">
     @if(session('toastr'))
@@ -298,49 +300,49 @@
     @yield('script')
     @stack('tools')
     <script>
-        $("div#photo-dropzone").dropzone({
-                url: "{{ route('file.store_product_photos') }}",
-                headers: {
-                    'x-csrf-token': '{{ csrf_token() }}',
-                },
-                paramName: 'photo',
-                parallelUploads: 3,
-                // maxFilesize: 0.2,
-                // maxFiles: 3,
-                acceptedFiles: 'image/*',
-                // previewTemplate: document.querySelector('#preview').innerHTML,
-                addRemoveLinks: true,
-                dictDefaultMessage: 'Click here or drop files here to upload!',
-                dictRemoveFile: 'Remove file',
-                // dictFileTooBig: 'Image is larger than 200Kb',
-                dictRemoveFileConfirmation: 'Are you sure?',
-                timeout: 10000,
+        {{--$("div#photo-dropzone").dropzone({--}}
+        {{--        url: "{{ route('file.store_product_photos') }}",--}}
+        {{--        headers: {--}}
+        {{--            'x-csrf-token': '{{ csrf_token() }}',--}}
+        {{--        },--}}
+        {{--        paramName: 'photo',--}}
+        {{--        parallelUploads: 3,--}}
+        {{--        // maxFilesize: 0.2,--}}
+        {{--        // maxFiles: 3,--}}
+        {{--        acceptedFiles: 'image/*',--}}
+        {{--        // previewTemplate: document.querySelector('#preview').innerHTML,--}}
+        {{--        addRemoveLinks: true,--}}
+        {{--        dictDefaultMessage: 'Click here or drop files here to upload!',--}}
+        {{--        dictRemoveFile: 'Remove file',--}}
+        {{--        // dictFileTooBig: 'Image is larger than 200Kb',--}}
+        {{--        dictRemoveFileConfirmation: 'Are you sure?',--}}
+        {{--        timeout: 10000,--}}
 
-                init: function () {
-                    this.on("removedfile", function (file) {
-                        $('#'+file.serverFileUuid).remove();
-                        $.post({
-                            url: "{{ route('file.delete') }}",
-                            data: {
-                                uuid: file.serverFileUuid,
-                                _token: '{{ csrf_token() }}'
-                            },
-                            dataType: 'json',
-                            success: function (data) {
-                                if(data.status && data.status === 'success'){
-                                    toastr.info('File '+ file.name +' was deleted!');
-                                }
-                            }
-                        });
-                    });
-                },
-                success: function (file, responseData) {
-                    $('#photo-dropzone').append('<input type="hidden" id="'+responseData.uuid+'" name="uuid_photos[]"  value="'+responseData.uuid+'">');
+        {{--        init: function () {--}}
+        {{--            this.on("removedfile", function (file) {--}}
+        {{--                $('#'+file.serverFileUuid).remove();--}}
+        {{--                $.post({--}}
+        {{--                    url: "{{ route('file.delete') }}",--}}
+        {{--                    data: {--}}
+        {{--                        uuid: file.serverFileUuid,--}}
+        {{--                        _token: '{{ csrf_token() }}'--}}
+        {{--                    },--}}
+        {{--                    dataType: 'json',--}}
+        {{--                    success: function (data) {--}}
+        {{--                        if(data.status && data.status === 'success'){--}}
+        {{--                            toastr.info('File '+ file.name +' was deleted!');--}}
+        {{--                        }--}}
+        {{--                    }--}}
+        {{--                });--}}
+        {{--            });--}}
+        {{--        },--}}
+        {{--        success: function (file, responseData) {--}}
+        {{--            $('#photo-dropzone').append('<input type="hidden" id="'+responseData.uuid+'" name="uuid_photos[]"  value="'+responseData.uuid+'">');--}}
 
-                    file.serverFileUuid = responseData.uuid;
-                    toastr.success('File '+ file.name +' uploaded successful!');
-                }
-            });
+        {{--            file.serverFileUuid = responseData.uuid;--}}
+        {{--            toastr.success('File '+ file.name +' uploaded successful!');--}}
+        {{--        }--}}
+        {{--    });--}}
     </script>
 </body>
 

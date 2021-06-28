@@ -41,6 +41,7 @@ Route::prefix('admin')->namespace('Backend')->middleware('AdminCheckLogout')->gr
         Route::post('update/{id}', 'GraphController@update');
         Route::get('repost/{id}', 'GraphController@repost')->name('admin.PublishPage.repost');
         Route::get('delete/{id}', 'GraphController@delete')->name('admin.PublishPage.delete');
+        Route::get('/test', 'GraphController@getPageIds');
     });
     Route::prefix('product')->group(function () {
         Route::get('list', 'AdminProductController@index')->name('admin.product.list');

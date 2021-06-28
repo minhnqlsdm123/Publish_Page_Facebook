@@ -13,12 +13,6 @@ class AccountTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('account')->insert([
-            'name' => 'Trần Văn Vàng',
-            'email' => 'nghiadh@gmail.com',
-            'password' => Hash::make('123456')
-        ]);
-
         DB::table('users')->insert([
             'name' => 'Trần Văn Vàng',
             'email' => 'nghiadh@gmail.com',

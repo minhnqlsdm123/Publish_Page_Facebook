@@ -16,10 +16,10 @@ class CreatePostsTable extends Migration
         Schema::create('posts', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('post_id');
-            $table->text('message');
+            $table->string('facebook_page_id');
+            $table->text('content');
             $table->dateTime('published_time')->nullable();
             $table->integer('status');
-            $table->boolean('published');
             $table->timestamps();
         });
     }

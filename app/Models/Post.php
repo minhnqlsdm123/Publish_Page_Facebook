@@ -11,7 +11,7 @@ class Post extends Model
     const STATUS_PUBLISH_SCHEDULED = 3; // Hẹn lịch đăng lên facebook
     protected $table = 'posts';
 
-    protected $fillable = ['id', 'post_id', 'message', 'published_time', 'status', 'published'];
+    protected $fillable = ['id', 'post_id', 'message', 'facebook_page_id','published_time', 'status', 'published'];
 
 //    protected $status = [
 //        0 => [

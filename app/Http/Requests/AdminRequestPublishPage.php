@@ -26,13 +26,13 @@ class AdminRequestPublishPage extends FormRequest
     public function rules()
     {
         return [
-            'message' => 'required'
+            'content' => 'required'
         ];
     }
     public function messages()
     {
         return [
-            'message.required' => 'Dữ liệu không được trống',
+            'content.required' => 'Dữ liệu không được trống',
         ];
     }
 }

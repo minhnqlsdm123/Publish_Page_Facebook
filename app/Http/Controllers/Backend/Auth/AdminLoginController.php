@@ -15,6 +15,21 @@ class AdminLoginController extends Controller
 
     public function postLogin(Request $request)
     {
+//        dd($request->all());
+        $this->validate(
+            $request,
+            [
+                'email' => 'required|email|unique:users,email',
+                'password' => 'required'
+            ],
+            [
+                'email.required' => 'Email không được trống',
+                'email.unique' => 'Email đã tồn tại trên hệ thống',
+                'email.email' => 'Email chưa đúng định dạng',
+                'password' => 'Password không được để trống'
+            ]
+        );
+
         $data = [
             'email' => $request->email,
             'password' => $request->password,
@@ -34,9 +49,16 @@ class AdminLoginController extends Controller
         }
     }
 
-    public function getLogout()
+    public function getLogout(Request $request)
     {
         if (Auth::check()) {
+            $this->guard()->logout();
+
+            $request->session()->flush();
+
+            $request->session()->regenerate();
+
+            session(['user_logged_out' => true]);
             Auth::logout();
             \Session::flash('toastr', [
                 'type' => 'info',
